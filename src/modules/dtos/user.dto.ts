@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 import { Exclude } from 'class-transformer';
 
 export class User {
@@ -22,4 +22,11 @@ export class SerializedUser {
   @IsNotEmpty()
   @Exclude()
   password: string;
+}
+
+export class UpdatedUserOptions {
+  @IsEmail()
+  email: string | undefined;
+
+  password: string | undefined;
 }

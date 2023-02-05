@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -9,10 +10,13 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdatedUserOptions, User } from '../dtos/user.dto';
+import { SerializedUser, UpdatedUserOptions, User } from '../dtos/user.dto';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -20,7 +24,7 @@ export class UserController {
   @Get('')
   async getUsers() {
     const users = await this.userService.getUsers();
-    return users;
+    return users.map((user) => new SerializedUser(user));
   }
 
   @Get(':id')
@@ -30,23 +34,38 @@ export class UserController {
     if (!user)
       throw new HttpException('User Not Found', HttpStatus.BAD_REQUEST);
 
-    return user;
+    return new SerializedUser(user);
   }
 
   @Post('')
   async addUser(@Body() user: User) {
     const userDB = await this.userService.addUser(user);
-    return userDB;
+    return new SerializedUser(userDB);
   }
 
   @Patch(':id')
   async updateUser(@Param('id') id: string, @Body() user: UpdatedUserOptions) {
     const userDB = await this.userService.updateUser(id, user);
-    return userDB;
+    return new SerializedUser(userDB);
   }
 
   @Delete(':id')
   async deleteUser(@Param('id') id: string) {
-    return await this.userService.deleteUser(id);
+    try {
+      const deletedUser = await this.userService.deleteUser(id);
+
+      if (!deletedUser)
+        throw new HttpException('User Not Found', HttpStatus.BAD_REQUEST);
+
+      return { msg: 'Successfully Deleted.' };
+    } catch (e) {
+      if (e instanceof PrismaClientKnownRequestError) {
+        if (e.code === 'P2025')
+          throw new HttpException(
+            'Record to delete does not exist.',
+            HttpStatus.BAD_REQUEST,
+          );
+      }
+    }
   }
 }

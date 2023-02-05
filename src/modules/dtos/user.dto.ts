@@ -22,6 +22,10 @@ export class SerializedUser {
   @IsNotEmpty()
   @Exclude()
   password: string;
+
+  constructor(partial: Partial<SerializedUser>) {
+    Object.assign(this, partial);
+  }
 }
 
 export class UpdatedUserOptions {

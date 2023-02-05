@@ -11,7 +11,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from '../dtos/user.dto';
+import { UpdatedUserOptions, User } from '../dtos/user.dto';
 
 @Controller('users')
 export class UserController {
@@ -40,10 +40,7 @@ export class UserController {
   }
 
   @Patch(':id')
-  async updateUser(
-    @Param('id') id: string,
-    @Body() user: { email: string | undefined; password: string | undefined },
-  ) {
+  async updateUser(@Param('id') id: string, @Body() user: UpdatedUserOptions) {
     const userDB = await this.userService.updateUser(id, user);
     return userDB;
   }

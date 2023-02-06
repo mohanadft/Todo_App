@@ -44,13 +44,16 @@ export class UserController {
   }
 
   @Patch(':id')
-  async updateUser(@Param('id') id: string, @Body() user: UpdatedUserOptions) {
+  async updateUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() user: UpdatedUserOptions,
+  ) {
     const userDB = await this.userService.updateUser(id, user);
     return new SerializedUser(userDB);
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: string) {
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const deletedUser = await this.userService.deleteUser(id);
 

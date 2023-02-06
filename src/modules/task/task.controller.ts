@@ -7,39 +7,50 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { Task, UpdatedTaskOptions } from '../dtos/task.dto';
-
+import { User } from '../auth/decorators/get-user.decorator';
+import { AuthGuard } from '@nestjs/passport';
+@UseGuards(AuthGuard('jwt'))
 @Controller('tasks')
 export class TaskController {
   constructor(private taskService: TaskService) {}
 
   @Get()
-  async getTasks() {
-    return await this.taskService.getTasks();
+  getTasks(@User('sub') userId: string) {
+    return this.taskService.getTasks(userId);
   }
 
   @Get(':id')
-  async getTaskById(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.taskService.getTaskById(id);
+  getTaskById(
+    @User('sub') userId: string,
+    @Param('id', ParseUUIDPipe) taskId: string,
+  ) {
+    return this.taskService.getTaskById(userId, taskId);
   }
 
   @Post()
-  async addTask(@Body() data: Task) {
-    return await this.taskService.addTask(data);
+  addTask(@User('sub') userId: string, @Body() data: Task) {
+    return this.taskService.addTask(userId, data);
   }
 
   @Patch(':id')
-  async updateTask(
-    @Param('id', ParseUUIDPipe) id: string,
-    data: UpdatedTaskOptions,
+  updateTask(
+    @User('sub') userId: string,
+    @Param('id', ParseUUIDPipe) taskId: string,
+    @Body() data: UpdatedTaskOptions,
   ) {
-    return await this.taskService.updateTask(id, data);
+    console.log({ data, userId, taskId });
+    return this.taskService.updateTask(userId, taskId, data);
   }
 
   @Delete(':id')
-  async deleteTask(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.taskService.deleteTask(id);
+  deleteTask(
+    @User('sub') userId: string,
+    @Param('id', ParseUUIDPipe) taskId: string,
+  ) {
+    return this.taskService.deleteTask(userId, taskId);
   }
 }

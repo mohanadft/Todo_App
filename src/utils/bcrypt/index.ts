@@ -7,7 +7,7 @@ const hashPassword = (password: string) => {
   return newPassword;
 };
 
-const compare = (password, encrypted: string) => {
+const compare = (password: string, encrypted: string) => {
   return compareSync(password, encrypted);
 };
 

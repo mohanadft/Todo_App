@@ -16,6 +16,8 @@ model User {
   password String
 
   Task Task[]
+
+  @@index([email])
 }
 
 model Task {

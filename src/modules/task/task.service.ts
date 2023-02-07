@@ -28,11 +28,12 @@ export class TaskService {
   }
 
   async updateTask(userId: string, taskId: string, data: UpdatedTaskOptions) {
+    const { description, title } = data;
     const task = await this.prismaService.task.updateMany({
       where: { id: taskId, userId },
       data: {
-        description: data.description,
-        title: data.title,
+        description,
+        title,
       },
     });
     return task;

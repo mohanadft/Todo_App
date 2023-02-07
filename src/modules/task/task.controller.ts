@@ -42,7 +42,6 @@ export class TaskController {
     @Param('id', ParseUUIDPipe) taskId: string,
     @Body() data: UpdatedTaskOptions,
   ) {
-    console.log({ data, userId, taskId });
     return this.taskService.updateTask(userId, taskId, data);
   }
 

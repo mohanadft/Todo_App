@@ -1,5 +1,4 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
-import { Exclude } from 'class-transformer';
 
 export class User {
   @IsNotEmpty()
@@ -8,20 +7,6 @@ export class User {
 
   @IsNotEmpty()
   password: string;
-}
-
-export class SerializedUser {
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
-
-  @IsNotEmpty()
-  @Exclude()
-  password: string;
-
-  constructor(partial: Partial<SerializedUser>) {
-    Object.assign(this, partial);
-  }
 }
 
 export class UpdatedUserOptions {

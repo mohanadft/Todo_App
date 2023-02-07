@@ -3,13 +3,14 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { compare, hashPassword } from '../../utils/bcrypt/';
 import { User } from '../dtos/user.dto';
 import { JwtService } from '@nestjs/jwt';
-import config from '../../config/config';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
+    private configSrvice: ConfigService,
   ) {}
 
   async getTokens(userId: string, email: string) {
@@ -19,7 +20,7 @@ export class AuthService {
         email,
       },
       {
-        secret: config().secret,
+        secret: this.configSrvice.get('SECRET'),
         expiresIn: 15 * 60,
       },
     );

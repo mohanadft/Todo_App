@@ -10,6 +10,7 @@ export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
+    // look for typos
     private configSrvice: ConfigService,
   ) {}
 
@@ -37,6 +38,7 @@ export class AuthService {
 
     const access_token = await this.getTokens(userDB.id, userDB.email);
 
+    // return user data with the access token
     return { access_token };
   }
 
@@ -45,6 +47,7 @@ export class AuthService {
       where: { email: data.email },
     });
 
+    // return that the user does not exist
     if (!userDB) throw new ForbiddenException('Access Denied');
 
     const matches = compare(data.password, userDB.password);

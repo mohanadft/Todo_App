@@ -32,6 +32,9 @@ export class TaskController {
   }
 
   @Post()
+  // when does the decorator @User get filled? 
+  // usually a global guard middleware does that
+  // I think this is unauthenticated the user
   addTask(@User('sub') userId: string, @Body() data: Task) {
     return this.taskService.addTask(userId, data);
   }
@@ -42,6 +45,7 @@ export class TaskController {
     @Param('id', ParseUUIDPipe) taskId: string,
     @Body() data: UpdatedTaskOptions,
   ) {
+    // remove console.logs
     console.log({ data, userId, taskId });
     return this.taskService.updateTask(userId, taskId, data);
   }

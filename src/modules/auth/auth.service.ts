@@ -33,11 +33,15 @@ export class AuthService {
         email: data.email,
         password: hashPassword(data.password),
       },
+      select: {
+        id: true,
+        email: true,
+      },
     });
 
     const access_token = await this.getTokens(userDB.id, userDB.email);
 
-    return { access_token };
+    return { data: userDB, access_token };
   }
 
   async signIn(data: User) {
@@ -45,7 +49,7 @@ export class AuthService {
       where: { email: data.email },
     });
 
-    if (!userDB) throw new ForbiddenException('Access Denied');
+    if (!userDB) throw new ForbiddenException('User does not exist.');
 
     const matches = compare(data.password, userDB.password);
     if (!matches) throw new ForbiddenException('Access Denied');

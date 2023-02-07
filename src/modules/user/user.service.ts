@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { UpdatedUserOptions, User } from '../dtos/user.dto';
-import { hashPassword } from 'src/utils/bcrypt';
+import { hashPassword } from '../../utils/bcrypt';
 
 @Injectable()
 export class UserService {

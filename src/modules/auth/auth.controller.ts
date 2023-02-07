@@ -11,6 +11,7 @@ export class AuthController {
     return this.authService.signUp(data);
   }
 
+  // what is the need for the first decorator?
   @HttpCode(HttpStatus.OK)
   @Post('signin')
   signIn(@Body() data: User) {

@@ -8,3 +8,6 @@ async function bootstrap() {
   await app.listen(8080);
 }
 bootstrap();
+
+// Include .env in your file
+// use a dynamic config module

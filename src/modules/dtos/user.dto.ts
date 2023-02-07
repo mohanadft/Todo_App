@@ -10,6 +10,7 @@ export class User {
   password: string;
 }
 
+// This is unnecessary, you can just use the User class
 export class SerializedUser {
   @IsNotEmpty()
   @IsEmail()

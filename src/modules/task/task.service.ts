@@ -31,6 +31,8 @@ export class TaskService {
     const task = await this.prismaService.task.updateMany({
       where: { id: taskId, userId },
       data: {
+        // data.description should be deconstructed at the top of the function
+        // eg. const { description, title } = data;
         description: data.description,
         title: data.title,
       },

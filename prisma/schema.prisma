@@ -1,15 +1,21 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+
+
 generator client {
   provider = "prisma-client-js"
 }
 
+// make your prisma inside src, look up how to do that
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+// You should include these fields in your model
+// createdAt, createdBy, updatedAt, updatedBy, deletedAt, deletedBy
+// only perform softdelete (look this up, no data should be permanently deleted)
 model User {
   id       String @id @default(uuid())
   email    String @unique

@@ -10,7 +10,7 @@ export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-    private configSrvice: ConfigService,
+    private configService: ConfigService,
   ) {}
 
   async getTokens(userId: string, email: string) {
@@ -20,7 +20,7 @@ export class AuthService {
         email,
       },
       {
-        secret: this.configSrvice.get('SECRET'),
+        secret: this.configService.get('SECRET'),
         expiresIn: 15 * 60,
       },
     );

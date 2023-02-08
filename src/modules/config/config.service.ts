@@ -13,7 +13,6 @@ export class ConfigService {
   }
 
   get(key: string): string {
-    console.log(this.envConfig);
     return this.envConfig[key];
   }
 }

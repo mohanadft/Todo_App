@@ -16,4 +16,9 @@ export class AuthController {
   signIn(@Body() data: User) {
     return this.authService.signIn(data);
   }
+
+  @Post('signinAsAnAdmin')
+  signInAsAnAdmin(@Body('password') pass: string) {
+    return this.authService.signInAsAnAdmin(pass);
+  }
 }

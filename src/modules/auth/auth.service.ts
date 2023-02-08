@@ -16,6 +16,7 @@ export class AuthService {
   async getTokens(userId: string, email: string) {
     const access_token = await this.jwtService.signAsync(
       {
+        roles: 'user',
         sub: userId,
         email,
       },
@@ -36,6 +37,7 @@ export class AuthService {
       select: {
         id: true,
         email: true,
+        tasks: true,
       },
     });
 
@@ -55,6 +57,24 @@ export class AuthService {
     if (!matches) throw new ForbiddenException('Access Denied');
 
     const access_token = await this.getTokens(userDB.id, userDB.email);
+    userDB.password = '';
+    return { data: userDB, access_token };
+  }
+
+  async signInAsAnAdmin(password: string) {
+    if (password !== this.configService.get('ADMIN_PASSWORD'))
+      throw new ForbiddenException('Access denied');
+
+    const access_token = await this.jwtService.signAsync(
+      {
+        roles: 'admin',
+        name: 'admin',
+      },
+      {
+        secret: this.configService.get('SECRET'),
+        expiresIn: 15 * 60,
+      },
+    );
     return { access_token };
   }
 }

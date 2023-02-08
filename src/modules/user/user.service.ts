@@ -8,13 +8,15 @@ export class UserService {
   constructor(private prismaService: PrismaService) {}
 
   async getUsers() {
-    return await this.prismaService.user.findMany();
+    return await this.prismaService.user.findMany({
+      select: { id: true, email: true, tasks: true },
+    });
   }
 
   async getUserById(id: string) {
     return await this.prismaService.user.findUnique({
       where: { id },
-      select: { password: false },
+      select: { id: true, email: true, tasks: true },
     });
   }
 
@@ -23,7 +25,7 @@ export class UserService {
 
     return await this.prismaService.user.create({
       data: { ...user, password: encryptedPassword },
-      select: { password: false },
+      select: { id: true, email: true, tasks: true },
     });
   }
 
@@ -35,7 +37,9 @@ export class UserService {
         password: data.password ? hashPassword(data.password) : undefined,
       },
       select: {
-        password: false,
+        id: true,
+        email: true,
+        tasks: true,
       },
     });
 

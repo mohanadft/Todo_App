@@ -1,6 +1,5 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -10,23 +9,28 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
-  UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdatedUserOptions, User } from '../dtos/user.dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-
-@UseInterceptors(ClassSerializerInterceptor)
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { AuthGuard } from '@nestjs/passport';
+@UseGuards(AuthGuard('jwt'))
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
+  @Roles('admin')
+  @UseGuards(RolesGuard)
   async getUsers() {
     return this.userService.getUsers();
   }
 
   @Get(':id')
+  @Roles('admin')
   getUser(@Param('id', ParseUUIDPipe) id: string) {
     const user = this.userService.getUserById(id);
 
@@ -37,11 +41,13 @@ export class UserController {
   }
 
   @Post()
+  @Roles('admin')
   addUser(@Body() user: User) {
     return this.userService.addUser(user);
   }
 
   @Patch(':id')
+  @Roles('admin')
   updateUser(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() user: UpdatedUserOptions,
@@ -50,6 +56,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @Roles('admin')
   deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const deletedUser = this.userService.deleteUser(id);

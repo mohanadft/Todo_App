@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdatedUserOptions, User } from '../dtos/user.dto';
+import { User } from '../dtos/user.dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -50,7 +50,7 @@ export class UserController {
   @Roles('admin')
   updateUser(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() user: UpdatedUserOptions,
+    @Body() user: Partial<User>,
   ) {
     return this.userService.updateUser(id, user);
   }

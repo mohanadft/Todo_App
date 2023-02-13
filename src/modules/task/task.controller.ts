@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
-import { Task, UpdatedTaskOptions } from '../dtos/task.dto';
+import { Task } from '../dtos/task.dto';
 import { User } from '../auth/decorators/get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
 @UseGuards(AuthGuard('jwt'))
@@ -40,7 +40,7 @@ export class TaskController {
   updateTask(
     @User('sub') userId: string,
     @Param('id', ParseUUIDPipe) taskId: string,
-    @Body() data: UpdatedTaskOptions,
+    @Body() data: Partial<Task>,
   ) {
     return this.taskService.updateTask(userId, taskId, data);
   }

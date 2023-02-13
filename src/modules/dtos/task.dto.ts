@@ -6,8 +6,3 @@ export class Task {
 
   description: string | undefined;
 }
-
-export class UpdatedTaskOptions {
-  title: string | undefined;
-  description: string | undefined;
-}

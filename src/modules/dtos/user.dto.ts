@@ -8,10 +8,3 @@ export class User {
   @IsNotEmpty()
   password: string;
 }
-
-export class UpdatedUserOptions {
-  @IsEmail()
-  email: string | undefined;
-
-  password: string | undefined;
-}

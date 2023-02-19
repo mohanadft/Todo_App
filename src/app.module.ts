@@ -7,9 +7,7 @@ import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      file: '.env',
-    }),
+    ConfigModule.forRoot({ file: `.env.${process.env.NODE_ENV}` }),
     UserModule,
     TaskModule,
     AuthModule,

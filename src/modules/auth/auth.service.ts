@@ -57,7 +57,7 @@ export class AuthService {
     if (!matches) throw new ForbiddenException('Access Denied');
 
     const access_token = await this.getTokens(userDB.id, userDB.email);
-    userDB.password = '';
+    delete userDB.password;
     return { data: userDB, access_token };
   }
 

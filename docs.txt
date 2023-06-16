@@ -1,1 +1,0 @@
-Hello I'm mohanad and this is my first time with vim, COOL! I like it.
